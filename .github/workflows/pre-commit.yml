@@ -8,6 +8,7 @@ on:
     branches:
       - "16.0"
       - "16.0-ocabot-*"
+      - "test-*"
 
 jobs:
   pre-commit:
