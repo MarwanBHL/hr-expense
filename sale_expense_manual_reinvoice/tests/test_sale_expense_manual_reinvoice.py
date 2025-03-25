@@ -11,7 +11,7 @@ from odoo.tests import tagged
 from odoo.addons.hr_expense.tests.common import TestExpenseCommon
 
 
-@tagged("post_install", "-at_install")
+@tagged("post_install", "-at_install", "odoo_test")
 class TestReInvoiceManual(TestExpenseCommon):
     @classmethod
     def setUpClass(cls):
@@ -52,6 +52,8 @@ class TestReInvoiceManual(TestExpenseCommon):
                 "product_id": cls.product_expense_manual.id,
                 "unit_amount": cls.product_expense_manual.lst_price,
                 "sale_order_id": cls.order.id,
+                "analytic_distribution": {cls.analytic_account_1.id: 100},
+                "total_amount": 1000.0,
             }
         )
 
@@ -87,7 +89,6 @@ class TestReInvoiceManual(TestExpenseCommon):
     def test_expense_manual_reinvoice_without_sale_order(self):
         """Test case without sale order on hr.expense"""
         self.expense.sale_order_id = False
-        self.expense.analytic_account_id = self.order.analytic_account_id
         self.expense_sheet.approve_expense_sheets()
         self.expense_sheet.action_sheet_move_create()
         self.assertFalse(self.order.order_line, "No expense should've been created yet")
