@@ -54,13 +54,12 @@
                 <field name="product_id" readonly="1" />
                 <field name="name" readonly="1" />
                 <field name="state" invisible="1" />
-                <field name="reference" readonly="1" optional="hide" />
                 <field
                     name="sale_order_id"
                     options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"
                     context="{'sale_show_partner_name': True, 'sale_expense_all_order': True}"
                     domain="[('analytic_account_id', 'in', analytic_account_ids), ('state', '=', 'sale')]"
-                    attrs="{'readonly': False}"
+                    readonly="1"
                 />
                 <field name="analytic_account_ids" readonly="1" optional="show" />
                 <field name="account_id" readonly="1" optional="hide" />
@@ -72,9 +71,9 @@
                     title="View Attachments"
                     class="float-right pr-0"
                 />
-                <field name="attachment_number" class="text-left pl-0" nolabel="1" />
+                <field name="nb_attachment" class="text-left pl-0" nolabel="1" />
                 <field
-                    name="unit_amount"
+                    name="price_unit"
                     readonly="1"
                     optional="hide"
                     widget="monetary"
@@ -91,14 +90,13 @@
                     groups="account.group_account_readonly"
                     context="{'default_company_id': company_id}"
                 />
-                <field name="total_amount" readonly="1" optional="show" />
+                <field name="total_amount_currency" readonly="1" optional="show" />
                 <field name="company_currency_id" readonly="1" invisible="1" />
                 <field
-                    name="total_amount_company"
+                    name="total_amount"
                     optional="show"
                     groups="base.group_multi_currency"
                 />
-                <field name="is_refused" invisible="True" />
                 <field name="manual_reinvoice_done" invisible="True" />
                 <field name="manual_reinvoice_discarded" invisible="True" />
             </tree>

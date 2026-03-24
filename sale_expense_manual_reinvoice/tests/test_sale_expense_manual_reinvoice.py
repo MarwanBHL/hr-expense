@@ -50,10 +50,10 @@ class TestReInvoiceManual(TestExpenseCommon):
                 "name": "Expense",
                 "date": fields.Date.today(),
                 "product_id": cls.product_expense_manual.id,
-                "unit_amount": cls.product_expense_manual.lst_price,
+                "price_unit": cls.product_expense_manual.lst_price,
                 "sale_order_id": cls.order.id,
                 "analytic_distribution": {cls.analytic_account_1.id: 100},
-                "total_amount": 1000.0,
+                "total_amount_currency": 1000.0,
             }
         )
 
@@ -68,7 +68,7 @@ class TestReInvoiceManual(TestExpenseCommon):
 
     def test_expense_manual_reinvoice(self):
         """Test the full manual reinvoice flow"""
-        self.expense_sheet.approve_expense_sheets()
+        self.expense_sheet.action_approve_expense_sheets()
         self.expense_sheet.action_sheet_move_create()
         self.assertTrue(self.expense.manual_reinvoice)
         self.assertFalse(self.order.order_line, "No expense should've been created yet")
@@ -89,7 +89,7 @@ class TestReInvoiceManual(TestExpenseCommon):
     def test_expense_manual_reinvoice_without_sale_order(self):
         """Test case without sale order on hr.expense"""
         self.expense.sale_order_id = False
-        self.expense_sheet.approve_expense_sheets()
+        self.expense_sheet.action_approve_expense_sheets()
         self.expense_sheet.action_sheet_move_create()
         self.assertFalse(self.order.order_line, "No expense should've been created yet")
         # Check the re-invoice menu
@@ -114,8 +114,8 @@ class TestReInvoiceManual(TestExpenseCommon):
     def test_expense_auto_reinvoice(self):
         """Test that the normal flow still works"""
         self.expense.product_id = self.product_expense_auto
-        self.expense.unit_amount = 1500.0  # amount resets after product change
-        self.expense_sheet.approve_expense_sheets()
+        self.expense.price_unit = 1500.0  # amount resets after product change
+        self.expense_sheet.action_approve_expense_sheets()
         self.expense_sheet.action_sheet_move_create()
         self.assertFalse(self.expense.manual_reinvoice)
         self.assertTrue(self.order.order_line, "The expense should've been reinvoiced")
@@ -133,7 +133,7 @@ class TestReInvoiceManual(TestExpenseCommon):
             self.expense.action_manual_reinvoice()
 
     def test_expense_manual_reinvoice_discard(self):
-        self.expense_sheet.approve_expense_sheets()
+        self.expense_sheet.action_approve_expense_sheets()
         self.expense_sheet.action_sheet_move_create()
         # Check the re-invoice menu
         self.assertIn(
@@ -162,7 +162,8 @@ class TestReInvoiceManual(TestExpenseCommon):
         self.assertTrue(self.order.order_line, "The expense should've been reinvoiced")
 
     def test_analytic_account_ids_computation(self):
-        """Test that analytic_account_ids is correctly computed from analytic_distribution."""
+        """Test that analytic_account_ids is correctly computed
+        from analytic_distribution."""
         self.expense.analytic_distribution = {
             str(self.analytic_account_1.id): 100,
         }
@@ -183,7 +184,8 @@ class TestReInvoiceManual(TestExpenseCommon):
         )
 
     def test_analytic_account_ids_computation_empty(self):
-        """Test that analytic_account_ids is empty when analytic_distribution is empty."""
+        """Test that analytic_account_ids is empty when analytic_distribution
+        is empty."""
         self.expense.analytic_distribution = {}
 
         # Trigger computation

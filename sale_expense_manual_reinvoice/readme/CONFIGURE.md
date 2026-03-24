@@ -4,4 +4,4 @@ On the **Expense Product**, set the **Re-invoice Mode**:
   posted (standard)
 - Manually: Expenses have to be manually re-invoiced by a manager
 
-![image](../static/description/configure.png)
+![configure](../static/description/configure.png)
