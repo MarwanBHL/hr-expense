@@ -13,7 +13,7 @@
     "category": "Human Resources",
     "depends": ["sale_expense"],
     "data": [
-        "views/account_analytic_line.xml",
+        #"views/account_analytic_line.xml",
         "views/hr_expense.xml",
         "views/product_template.xml",
     ],
